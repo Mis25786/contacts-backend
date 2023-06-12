@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+dotenv.config({ path: "./.env" });
 
 const app = require("./app");
 
-const DB_HOST =
-  "mongodb+srv://Misha:8cBjsbWdlULUOyMv@cluster0.bjulq21.mongodb.net/contacts_book?retryWrites=true&w=majority";
+const DB_HOST = process.env.DB_HOST;
 
 mongoose.set("strictQuery", true);
 
