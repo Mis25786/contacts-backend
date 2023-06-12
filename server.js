@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+// const dotenv = require("dotenv");
 
-dotenv.config({ path: "./.env" });
+// dotenv.config({ path: "./.env" });
 
 const app = require("./app");
 
-const DB_HOST = process.env.DB_HOST;
+// const DB_HOST = process.env.DB_HOST;
+const { DB_HOST } = require("./config");
 
 mongoose.set("strictQuery", true);
 
