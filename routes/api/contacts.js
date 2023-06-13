@@ -8,7 +8,7 @@ router.get("/", controllers.getAll);
 
 // router.get("/:id", controllers.getById);
 
-// router.post("/", controllers.addContact);
+router.post("/", controllers.addContact);
 
 // router.put("/:id", controllers.updateContact);
 

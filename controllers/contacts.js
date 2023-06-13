@@ -1,19 +1,18 @@
 const Contact = require("../models/contact");
-// const Joi = require("joi");
+const Joi = require("joi");
 
-// const { HttpError } = require("../helpers");
+const { HttpError } = require("../helpers");
 const { ctrlWrapper } = require("../helpers");
 
-// const addSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   phone: Joi.string().required(),
-// favorite: Joi.boolean().require(),
-// });
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean().required(),
+});
 
 const getAll = async (req, res) => {
   const result = await Contact.find();
-  console.log(result);
   res.json(result);
 };
 
@@ -26,15 +25,18 @@ const getAll = async (req, res) => {
 //   res.json(result);
 // };
 
-// const addContact = async (req, res) => {
-//   const { error } = addSchema.validate(req.body);
-//   if (error) {
-//     const errMessage = `missing required "${error.details[0].path[0]}" field`;
-//     throw HttpError(400, errMessage);
-//   }
-//   const result = await contacts.addContact(req.body);
-//   res.status(201).json(result);
-// };
+const addContact = async (req, res) => {
+  const { error } = addSchema.validate(req.body);
+  console.log(error);
+  if (error) {
+    console.log(error);
+    const errMessage = `missing required "${error.details[0].path[0]}" field`;
+    throw HttpError(400, errMessage);
+  }
+  const result = await Contact.create(req.body);
+  console.log(result);
+  res.status(201).json(result);
+};
 
 // const updateContact = async (req, res) => {
 //   const { error } = addSchema.validate(req.body);
@@ -69,7 +71,7 @@ const getAll = async (req, res) => {
 module.exports = {
   getAll: ctrlWrapper(getAll),
   // getById: ctrlWrapper(getById),
-  // addContact: ctrlWrapper(addContact),
+  addContact: ctrlWrapper(addContact),
   // updateContact: ctrlWrapper(updateContact),
   // deleteContact: ctrlWrapper(deleteContact),
 };
