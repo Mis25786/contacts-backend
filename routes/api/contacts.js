@@ -13,6 +13,8 @@ router.post("/", controllers.addContact);
 
 router.put("/:id", isValidId, controllers.updateContact);
 
+router.patch("/:id/favorite", isValidId, controllers.updateFavorite);
+
 // router.delete("/:id", isValidId, controllers.deleteContact);
 
 module.exports = router;
