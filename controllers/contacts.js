@@ -52,11 +52,11 @@ const updateContact = async (req, res) => {
 
 const updateFavorite = async (req, res) => {
   const { error } = addSchema.validate(req.body);
-  const { name, email, phone } = req.body;
+  // const { name, email, phone } = req.body;
 
-  if (!name && !email && !phone) {
-    throw HttpError(400, "missing fields");
-  }
+  // if (!name && !email && !phone) {
+  //   throw HttpError(400, "missing fields");
+  // }
   if (error) {
     const errMessage = `missing required "${error.details[0].path[0]}" field`;
     throw HttpError(400, errMessage);
