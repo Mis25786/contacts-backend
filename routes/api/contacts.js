@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", controllers.getAll);
 
-// router.get("/:id", controllers.getById);
+router.get("/:id", controllers.getById);
 
 router.post("/", controllers.addContact);
 

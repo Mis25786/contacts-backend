@@ -16,25 +16,25 @@ const getAll = async (req, res) => {
   res.json(result);
 };
 
-// const getById = async (req, res) => {
-//   const { id } = req.params;
-//   const result = await contacts.getContactById(id);
-//   if (!result) {
-//     throw HttpError(404, "Not found");
-//   }
-//   res.json(result);
-// };
+const getById = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const result = await Contact.findById(id);
+  console.log(result);
+  // const result = await Contact.findOne({ _id: id });
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(result);
+};
 
 const addContact = async (req, res) => {
   const { error } = addSchema.validate(req.body);
-  console.log(error);
   if (error) {
-    console.log(error);
     const errMessage = `missing required "${error.details[0].path[0]}" field`;
     throw HttpError(400, errMessage);
   }
   const result = await Contact.create(req.body);
-  console.log(result);
   res.status(201).json(result);
 };
 
@@ -70,7 +70,7 @@ const addContact = async (req, res) => {
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
-  // getById: ctrlWrapper(getById),
+  getById: ctrlWrapper(getById),
   addContact: ctrlWrapper(addContact),
   // updateContact: ctrlWrapper(updateContact),
   // deleteContact: ctrlWrapper(deleteContact),
