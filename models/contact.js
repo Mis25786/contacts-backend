@@ -21,7 +21,10 @@ const contactSchema = new Schema(
       //   },
       //   message: (props) => `${props.value} is not a valid phone number!`,
       // },
-      match: /^\d{3}-\d{3}-\d{4}$/,
+
+      // match: /^\d{3}-\d{3}-\d{4}$/,
+
+      match: /^\d{10}$/,
       required: true,
     },
     favorite: {
