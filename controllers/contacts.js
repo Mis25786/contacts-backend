@@ -4,7 +4,6 @@ const {
   updateFavoriteSchema,
 } = require("../models/contact");
 
-// const { HttpError } = require("../helpers");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
@@ -56,11 +55,6 @@ const updateContact = async (req, res) => {
 
 const updateFavorite = async (req, res) => {
   const { error } = updateFavoriteSchema.validate(req.body);
-  // const { name, email, phone } = req.body;
-
-  // if (!name && !email && !phone) {
-  //   throw HttpError(400, "missing fields");
-  // }
   if (error) {
     const errMessage = `missing required "${error.details[0].path[0]}" field`;
     throw HttpError(400, errMessage);
@@ -74,15 +68,15 @@ const updateFavorite = async (req, res) => {
   res.json(result);
 };
 
-// const deleteContact = async (req, res) => {
-//   const { id } = req.params;
-//   const result = await contacts.removeContact(id);
-//   console.log(result);
-//   if (!result) {
-//     throw HttpError(404, "Not found");
-//   }
-//   res.json({ message: "contact deleted" });
-// };
+const deleteContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndRemove(id);
+  console.log(result);
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json({ message: "contact deleted" });
+};
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
@@ -90,5 +84,5 @@ module.exports = {
   addContact: ctrlWrapper(addContact),
   updateContact: ctrlWrapper(updateContact),
   updateFavorite: ctrlWrapper(updateFavorite),
-  // deleteContact: ctrlWrapper(deleteContact),
+  deleteContact: ctrlWrapper(deleteContact),
 };
