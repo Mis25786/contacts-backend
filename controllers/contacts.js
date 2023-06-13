@@ -1,4 +1,8 @@
-const { Contact, addSchema } = require("../models/contact");
+const {
+  Contact,
+  addSchema,
+  updateFavoriteSchema,
+} = require("../models/contact");
 
 // const { HttpError } = require("../helpers");
 const { HttpError, ctrlWrapper } = require("../helpers");
@@ -51,7 +55,7 @@ const updateContact = async (req, res) => {
 };
 
 const updateFavorite = async (req, res) => {
-  const { error } = addSchema.validate(req.body);
+  const { error } = updateFavoriteSchema.validate(req.body);
   // const { name, email, phone } = req.body;
 
   // if (!name && !email && !phone) {
