@@ -11,7 +11,7 @@ router.get("/:id", isValidId, controllers.getById);
 
 router.post("/", controllers.addContact);
 
-// router.put("/:id", isValidId, controllers.updateContact);
+router.put("/:id", isValidId, controllers.updateContact);
 
 // router.delete("/:id", isValidId, controllers.deleteContact);
 
