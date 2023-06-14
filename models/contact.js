@@ -24,7 +24,9 @@ const contactSchema = new Schema(
 
       // match: /^\d{3}-\d{3}-\d{4}$/,
 
-      match: /^\d{10}$/,
+      // match: /^\d{10}$/,
+      match: /^\(\d{3}\) \d{3}-\d{4}$/,
+
       required: true,
     },
     favorite: {
