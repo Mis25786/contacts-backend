@@ -13,7 +13,7 @@ router.post("/", controllers.addContact);
 
 router.put("/:id", isValidId, controllers.updateContact);
 
-router.patch("/:id/favorite", isValidId, controllers.updateFavorite);
+router.patch("/:id/favorite", isValidId, controllers.updateStatusContact);
 
 router.delete("/:id", isValidId, controllers.deleteContact);
 

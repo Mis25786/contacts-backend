@@ -13,10 +13,7 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const result = await Contact.findById(id);
-  console.log(result);
-  // const result = await Contact.findOne({ _id: id });
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -53,10 +50,10 @@ const updateContact = async (req, res) => {
   res.json(result);
 };
 
-const updateFavorite = async (req, res) => {
+const updateStatusContact = async (req, res) => {
   const { error } = updateFavoriteSchema.validate(req.body);
   if (error) {
-    const errMessage = `missing required "${error.details[0].path[0]}" field`;
+    const errMessage = "missing field favorite";
     throw HttpError(400, errMessage);
   }
 
@@ -83,6 +80,6 @@ module.exports = {
   getById: ctrlWrapper(getById),
   addContact: ctrlWrapper(addContact),
   updateContact: ctrlWrapper(updateContact),
-  updateFavorite: ctrlWrapper(updateFavorite),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
   deleteContact: ctrlWrapper(deleteContact),
 };
