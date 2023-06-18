@@ -1,11 +1,11 @@
-// const express = require("express");
+const express = require("express");
 
-// const controllers = require("../../controllers/auth");
-// const isValidId = require("../../middlewares/isValidId");
-// // const { schemas } = require("../../models/user");
+const controllers = require("../../controllers/auth");
+const isValidId = require("../../middlewares/isValidId");
+// const { schemas } = require("../../models/user");
 
-// const router = express.Router();
+const router = express.Router();
 
-// router.post("/register", isValidId, controllers.register);
+router.post("/register", isValidId, controllers.register);
 
-// module.exports = router;
+module.exports = router;
