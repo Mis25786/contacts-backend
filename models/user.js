@@ -14,6 +14,7 @@ const userSchema = new Schema(
     email: {
       type: String,
       match: emailRegexp,
+      unique: true,
       required: true,
     },
     password: {
@@ -46,4 +47,3 @@ const schemas = {
 const User = model("user", userSchema);
 
 module.exports = { User, schemas };
-// module.exports = { User, registerSchema, loginSchema };

@@ -1,9 +1,15 @@
 const { User } = require("../models/user");
-// const { User, registerSchema, loginSchema } = require("../models/user");
+const HttpError = require("../helpers");
 
 const { ctrlWrapper } = require("../helpers");
 
 const register = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    throw HttpError(409, "Email already in use");
+  }
+
   const newUser = await User.create(req.body);
   console.log(newUser);
 
