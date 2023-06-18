@@ -1,7 +1,6 @@
 const { User } = require("../models/user");
-const HttpError = require("../helpers");
 
-const { ctrlWrapper } = require("../helpers");
+const { HttpError, ctrlWrapper } = require("../helpers");
 
 const register = async (req, res) => {
   const { email } = req.body;
