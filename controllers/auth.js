@@ -29,8 +29,6 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  console.log("email :>> ", email);
-  console.log("password :>> ", password);
 
   // провіряємо чи є в базі юзер який пробується залогінити
   const user = await User.findOne({ email });
@@ -43,7 +41,6 @@ const login = async (req, res) => {
 
   // якщо є то порівнюємо пароль що прийшов з тим що в базі
   const passwordCompare = await bcrypt.compare(password, user.password);
-  console.log("passwordCompare :>> ", passwordCompare);
 
   // якщо паролі не співпадають виводимо помилку
   if (!passwordCompare) {
@@ -57,7 +54,6 @@ const login = async (req, res) => {
 
   // якщо співпадають створюємо хешований токен
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  console.log("token :>> ", token);
 
   // повертаємо токен
   res.json({ token });
