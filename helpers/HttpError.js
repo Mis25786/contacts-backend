@@ -19,6 +19,8 @@ const errorMessageList = {
   500: "Internal Server Error",
   501: "Not Implemented",
   502: "Bad Gateway",
+  503: "Service Unavailable",
+  504: "Gateway Timeout",
 };
 
 const HttpError = (status, message = errorMessageList[status]) => {

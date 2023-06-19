@@ -27,7 +27,9 @@ const addContact = async (req, res) => {
     const errMessage = `missing required "${error.details[0].path[0]}" field`;
     throw HttpError(400, errMessage);
   }
-  const result = await Contact.create(req.body);
+
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
