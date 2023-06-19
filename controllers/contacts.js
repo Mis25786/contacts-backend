@@ -11,7 +11,7 @@ const getAll = async (req, res) => {
   const result = await Contact.find(
     { owner },
     "-createdAt -updatedAt"
-  ).populate("owner"); // populate особливий спосіб пошуку який використовується для поширення запиту
+  ).populate("owner", "name email"); // populate особливий спосіб пошуку який використовується для поширення запиту
   res.json(result);
 };
 
