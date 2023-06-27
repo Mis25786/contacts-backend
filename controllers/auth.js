@@ -8,8 +8,8 @@ const { v4 } = require("uuid");
 
 const { User } = require("../models/user");
 
-// const { HttpError, ctrlWrapper } = require("../helpers");
-const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
+const { HttpError, ctrlWrapper } = require("../helpers");
+// const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
 
 const { SECRET_KEY } = process.env;
 // const { SECRET_KEY, BASE_URL } = process.env;
@@ -37,15 +37,15 @@ const register = async (req, res) => {
   });
   console.log("newUser", newUser);
 
-  // створюємо емейл для підтвердження
-  const verifyEmail = {
-    to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="https://contacts-backend-8yby.onrender.com/auth/verify/${verificationCode}" >Click verify email</a>`,
-    // html: `<a target="_blank" href="${BASE_URL}/auth/verify/${verificationCode}" >Click verify email</a>`,
-  };
+  // // створюємо емейл для підтвердження
+  // const verifyEmail = {
+  //   to: email,
+  //   subject: "Verify email",
+  //   html: `<a target="_blank" href="https://contacts-backend-8yby.onrender.com/auth/verify/${verificationCode}" >Click verify email</a>`,
+  //   // html: `<a target="_blank" href="${BASE_URL}/auth/verify/${verificationCode}" >Click verify email</a>`,
+  // };
 
-  await sendEmail(verifyEmail); // відсилаємо підтвердження
+  // await sendEmail(verifyEmail); // відсилаємо підтвердження
 
   res.status(201).json({
     email: newUser.email,
