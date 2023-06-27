@@ -9,6 +9,9 @@ const router = express.Router();
 // signup
 router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 
+// верифікація
+router.get("/verify/:verificationCode", ctrl.verifyEmail);
+
 // signin
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 

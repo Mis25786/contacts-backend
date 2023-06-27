@@ -37,7 +37,7 @@ const register = async (req, res) => {
   });
   console.log("newUser", newUser);
 
-  // // створюємо емейл для підтвердження
+  // створюємо емейл для підтвердження
   const verifyEmail = {
     to: email,
     subject: "Verify email",
@@ -53,6 +53,29 @@ const register = async (req, res) => {
   });
 };
 
+const verifyEmail = async (req, res) => {
+  // в контролері емейл береме останню частину код
+  const { verificationCode } = req.params;
+
+  const user = await User.findOne({ verificationCode });
+
+  // дивимось чи така людина є якщо ні викидаємо помилку
+  if (!user) {
+    throw HttpError(401, "Email not found");
+  }
+
+  // якщо є то оновлюємо базу данних
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationCode: "",
+  });
+
+  // відправляємо повідомлення що веріфікація пройдена
+  res.json({
+    message: "Email verify success",
+  });
+};
+
 const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -63,6 +86,11 @@ const login = async (req, res) => {
   // якщо ні виводимо помилку
   if (!user) {
     throw HttpError(401, "Email or password invalid");
+  }
+
+  // провіряємо чи людина підтвердила емаіл при регістрації
+  if (!user.verify) {
+    throw HttpError(401, "Email not verified");
   }
 
   // якщо є то порівнюємо пароль що прийшов з тим що в базі
@@ -124,6 +152,7 @@ const updateAvatar = async (req, res) => {
 
 module.exports = {
   register: ctrlWrapper(register),
+  verifyEmail: ctrlWrapper(verifyEmail),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
