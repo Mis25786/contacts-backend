@@ -26,14 +26,14 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email); // генеруємо тимчасаву аватарку
-  const verificationCode = v4();
-  console.log("verificationCode", verificationCode);
+  const verificationToken = v4();
+  console.log("verificationToken", verificationToken);
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL,
-    verificationCode, // записали юзера в базу
+    verificationToken, // записали юзера в базу
   });
   console.log("newUser", newUser);
 
@@ -41,8 +41,8 @@ const register = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    // html: `<a target="_blank" href="https://contacts-backend-8yby.onrender.com/auth/verify/${verificationCode}" >Click verify email</a>`,
-    html: `<a target="_blank" href="${BASE_URL}/auth/verify/${verificationCode}" >Click verify email</a>`,
+    // html: `<a target="_blank" href="https://contacts-backend-8yby.onrender.com/auth/verify/${verificationToken}" >Click verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/auth/verify/${verificationToken}" >Click verify email</a>`,
   };
 
   await sendEmail(verifyEmail); // відсилаємо підтвердження
@@ -55,24 +55,26 @@ const register = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   // в контролері емейл береме останню частину код
-  const { verificationCode } = req.params;
+  const { verificationToken } = req.params;
 
-  const user = await User.findOne({ verificationCode });
+  const user = await User.findOne({ verificationToken });
 
   // дивимось чи така людина є якщо ні викидаємо помилку
   if (!user) {
-    throw HttpError(401, "Email not found");
+    // throw HttpError(401, "User not found");
+    throw HttpError(404, "User not found");
   }
 
   // якщо є то оновлюємо базу данних
   await User.findByIdAndUpdate(user._id, {
     verify: true,
-    verificationCode: "",
+    // verificationToken: "",
+    verificationToken: null,
   });
 
   // відправляємо повідомлення що веріфікація пройдена
-  res.json({
-    message: "Email verify success",
+  res.status(200).json({
+    message: "Verification successful",
   });
 };
 
@@ -85,28 +87,30 @@ const resendVerifyEmail = async (req, res) => {
 
   // якщо не має викидуємо помилку
   if (!user) {
-    throw HttpError(401, "Email not found");
+    // throw HttpError(401, "User not found");
+    throw HttpError(400, "missing required field email");
   }
 
   // провіряємо чи він вже не верифікував (підтвердив) емаіл
   if (user.verify) {
-    throw HttpError(401, "Email already verify");
+    // throw HttpError(401, "Email already verify");
+    throw HttpError(400, "Verification has already been passed");
   }
 
   // створюємо новий лист і відправляємо на емейл
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    // html: `<a target="_blank" href="https://contacts-backend-8yby.onrender.com/auth/verify/${verificationCode}" >Click verify email</a>`,
-    html: `<a target="_blank" href="${BASE_URL}/auth/verify/${user.verificationCode}" >Click verify email</a>`,
+    // html: `<a target="_blank" href="https://contacts-backend-8yby.onrender.com/auth/verify/${verificationToken}" >Click verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/auth/verify/${user.verificationToken}" >Click verify email</a>`,
   };
 
   // відправляємо лист
   await sendEmail(verifyEmail);
 
   // повідомляємо що лист відправили для верифікації
-  res.json({
-    message: "Verify email send success",
+  res.status(200).json({
+    message: "Verification email sent",
   });
 };
 

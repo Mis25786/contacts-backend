@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 
 // верифікація емейлу при регістрації
-router.get("/verify/:verificationCode", ctrl.verifyEmail);
+router.get("/verify/:verificationToken", ctrl.verifyEmail);
 
 // повторне відправлення емаіл якщо не прийшло
 router.post(
