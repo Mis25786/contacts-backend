@@ -6,17 +6,25 @@ const { schemas } = require("../../models/user");
 
 const router = express.Router();
 
-// signup
+// signup регістрація
 router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 
-// верифікація
+// верифікація емейлу при регістрації
 router.get("/verify/:verificationCode", ctrl.verifyEmail);
 
-// signin
+// повторне відправлення емаіл якщо не прийшло
+router.post(
+  "/verify",
+  validateBody(schemas.emailSchema),
+  ctrl.resendVerifyEmail
+);
+
+// signin логін
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
 router.get("/current", authenticate, ctrl.getCurrent);
 
+// виходимо із акаунта
 router.post("/logout", authenticate, ctrl.logout);
 
 router.patch(

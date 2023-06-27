@@ -76,6 +76,40 @@ const verifyEmail = async (req, res) => {
   });
 };
 
+const resendVerifyEmail = async (req, res) => {
+  // беремо з тіла запиту емейл
+  const { email } = req.body;
+
+  // провіряємо чи є в базі такий користувач
+  const user = await User.findOne({ email });
+
+  // якщо не має викидуємо помилку
+  if (!user) {
+    throw HttpError(401, "Email not found");
+  }
+
+  // провіряємо чи він вже не верифікував (підтвердив) емаіл
+  if (user.verify) {
+    throw HttpError(401, "Email already verify");
+  }
+
+  // створюємо новий лист і відправляємо на емейл
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    // html: `<a target="_blank" href="https://contacts-backend-8yby.onrender.com/auth/verify/${verificationCode}" >Click verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/auth/verify/${user.verificationCode}" >Click verify email</a>`,
+  };
+
+  // відправляємо лист
+  await sendEmail(verifyEmail);
+
+  // повідомляємо що лист відправили для верифікації
+  res.json({
+    message: "Verify email send success",
+  });
+};
+
 const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -153,6 +187,7 @@ const updateAvatar = async (req, res) => {
 module.exports = {
   register: ctrlWrapper(register),
   verifyEmail: ctrlWrapper(verifyEmail),
+  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
