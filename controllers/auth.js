@@ -4,12 +4,12 @@ const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
 // const jimp = require("jimp");
-const { v4 } = require("uuid");
+// const { v4 } = require("uuid");
 
 const { User } = require("../models/user");
 
-// const { HttpError, ctrlWrapper } = require("../helpers");
-const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
+const { HttpError, ctrlWrapper } = require("../helpers");
+// const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
 
 const { SECRET_KEY } = process.env;
 // const { SECRET_KEY, BASE_URL } = process.env;
@@ -26,26 +26,26 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email); // генеруємо тимчасаву аватарку
-  const verificationCode = v4();
-  console.log("verificationCode", verificationCode);
+  // const verificationCode = v4();
+  // console.log("verificationCode", verificationCode);
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL,
-    verificationCode, // записали юзера в базу
+    // verificationCode, // записали юзера в базу
   });
   console.log("newUser", newUser);
 
-  // створюємо емейл для підтвердження
-  const verifyEmail = {
-    to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="https://contacts-backend-8yby.onrender.com/auth/verify/${verificationCode}" >Click verify email</a>`,
-    // html: `<a target="_blank" href="${BASE_URL}/auth/verify/${verificationCode}" >Click verify email</a>`,
-  };
+  // // створюємо емейл для підтвердження
+  // const verifyEmail = {
+  //   to: email,
+  //   subject: "Verify email",
+  //   html: `<a target="_blank" href="https://contacts-backend-8yby.onrender.com/auth/verify/${verificationCode}" >Click verify email</a>`,
+  //   // html: `<a target="_blank" href="${BASE_URL}/auth/verify/${verificationCode}" >Click verify email</a>`,
+  // };
 
-  await sendEmail(verifyEmail); // відсилаємо підтвердження
+  // await sendEmail(verifyEmail); // відсилаємо підтвердження
 
   res.status(201).json({
     email: newUser.email,
